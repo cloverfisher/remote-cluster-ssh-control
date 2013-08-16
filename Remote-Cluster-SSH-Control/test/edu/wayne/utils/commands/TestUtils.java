@@ -10,7 +10,7 @@ public class TestUtils {
 
 	private static String username = "ei8449";
 	private static String nodename = "energyintcit1";
-	private static String password = "xxxxxxxxxxxx";
+	private static String password = "xxxxxxxxxxxy";
 	private static String host = "141.217.48.208";
 	private static int	port = 10001;
 	
