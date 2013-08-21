@@ -136,7 +136,8 @@ public class RNode {
 		}
 		if (builder.length() == 0)
 			return null;
-		return builder.toString();
+		// remove last "\n"
+		return builder.substring(0, builder.length()-1);
 	}
 	
 	/**

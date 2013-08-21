@@ -73,6 +73,23 @@ private static RNode node;
 	}
 
 	@Test
+	public void testDirMakeUndoRecursive() {
+		long current = System.currentTimeMillis();
+		String dir1 = "~/test" + current;
+		String dir2 = dir1 + "/" + (current+1000);
+		String dir3 = dir2 + "/" + (current + 2000);
+		DirMake dirMake1 = new DirMake(dir1, node);
+		assertTrue(dirMake1.execute());
+		DirMake dirMake3 = new DirMake(dir3, node);
+		assertTrue(dirMake3.execute());
+		assertTrue(new DirExist(dir3, node).execute());
+		assertTrue(dirMake3.undo());
+		assertTrue(!(new DirExist(dir3, node).execute()));
+		assertTrue(new DirExist(dir1, node).execute());
+		assertTrue(dirMake1.undo());
+		assertTrue(! (new DirExist(dir1, node).execute()));
+	}
+	@Test
 	public void testDirMakeUndo() {
 		long current = System.currentTimeMillis();
 		String dir1 = "~/test"+current;
@@ -86,6 +103,15 @@ private static RNode node;
 		assertFalse(new DirExist(dir1,node).execute());
 	}
 	
+	@Test
+	public void testDirMakeUndoBasic() {
+		long current = System.currentTimeMillis();
+		String dir1 = "~/test"+current;
+		DirMake dirMake1 = new DirMake(dir1, node);
+		assertTrue(dirMake1.execute());
+		assertTrue(dirMake1.undo());
+		assertFalse(new DirExist(dir1,node).execute());
+	}
 	@Test
 	public void testDirDelUndo() {
 		//build test environment
@@ -109,5 +135,12 @@ private static RNode node;
 		assertTrue(dirMake2.undo());
 		assertTrue(dirMake1.undo());
 		assertFalse(new DirExist(dir1,node).execute());
+	}
+	
+	@Test
+	public void testDirModeGet() {
+		FileModeGet cmd = new FileModeGet("/hadoop/software", node);
+		assertTrue(cmd.execute());
+		assertEquals(cmd.getMessage().getMsgStdOut(), "755");
 	}
 }
